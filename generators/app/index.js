@@ -41,6 +41,8 @@ CrowdtapAngularGenerator.prototype.createStructure = function() {
   this.mkdir('app/views');
 
   this.mkdir('css');
+  this.mkdir('css/base');
+  this.mkdir('css/components');
 
   this.mkdir('features');
   this.mkdir('features/step_definitions');
@@ -61,10 +63,13 @@ CrowdtapAngularGenerator.prototype.copyFiles = function() {
   this.copy('_parachute.json', 'parachute.json');
   this.copy('_circle.yml', 'circle.yml');
   this.copy('_node-version', '.node-version');
+  this.copy('_jshintrc', '.jshintrc');
+  this.copy('_bowerrc', '.bowerrc');
 
   this.template('_app.js', 'app/app.js');
   this.template('_directives.js', 'app/directive.js');
   this.template('_filters.js', 'app/filters.js');
+  this.template('_config.json', 'app/config.json');
 
   this.template('_steps.js', 'features/step_definitions/steps.js');
   this.template('_selectors.js', 'features/support/selectors.js');
@@ -74,5 +79,8 @@ CrowdtapAngularGenerator.prototype.copyFiles = function() {
 
   this.template('_public_index.html', 'public/index.html');
   this.copy('_jquery.min.js', 'public/jquery.min.js');
+
+  this.template('_css_index.less', 'css/index.less');
+  this.template('_base.less', 'css/base/base.less');
 }
 module.exports = CrowdtapAngularGenerator
