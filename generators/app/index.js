@@ -49,10 +49,11 @@ CrowdtapAngularGenerator.prototype.createStructure = function() {
   this.mkdir('public');
 
   this.mkdir('spec');
-  this.mkdir('factories');
+  this.mkdir('spec/factories');
 };
 
 CrowdtapAngularGenerator.prototype.copyFiles = function() {
+  this.template('_README.md', 'README.md');
   this.template('_server.js', 'server.js');
   this.template('_package.json', 'package.json');
   this.template('_bower.json', 'bower.json');
@@ -64,5 +65,14 @@ CrowdtapAngularGenerator.prototype.copyFiles = function() {
   this.template('_app.js', 'app/app.js');
   this.template('_directives.js', 'app/directive.js');
   this.template('_filters.js', 'app/filters.js');
+
+  this.template('_steps.js', 'features/step_definitions/steps.js');
+  this.template('_selectors.js', 'features/support/selectors.js');
+  this.template('_world.js', 'features/support/world.js');
+
+  this.template('_factory_index.js', 'spec/factories/index.js');
+
+  this.template('_public_index.html', 'public/index.html');
+  this.copy('_jquery.min.js', 'public/jquery.min.js');
 }
 module.exports = CrowdtapAngularGenerator
