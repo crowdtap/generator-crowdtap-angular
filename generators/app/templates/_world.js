@@ -1,3 +1,5 @@
+"use strict";
+
 (function() {
   var App, Factory, Port, Server, World, assert, express, path, selectors, sprintf, _;
 

@@ -63,7 +63,6 @@ CrowdtapAngularGenerator.prototype.copyFiles = function() {
   this.copy('_parachute.json', 'parachute.json');
   this.copy('_circle.yml', 'circle.yml');
   this.copy('_node-version', '.node-version');
-  this.copy('_jshintrc', '.jshintrc');
   this.copy('_bowerrc', '.bowerrc');
 
   this.template('_app.js', 'app/app.js');
