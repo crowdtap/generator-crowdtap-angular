@@ -1,0 +1,7 @@
+{
+  "dependencies": [
+    {
+      "src": "git@github.com:crowdtap/assets.shared.git#webdriver"
+    }
+  ]
+}

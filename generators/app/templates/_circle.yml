@@ -1,0 +1,16 @@
+general:
+  branches:
+    ignore:
+      - production
+machine:
+  timezone:
+    America/New_York
+  node:
+    version: 0.10.25
+  pre:
+    - npm config set ca ""
+deployment:
+  production:
+    branch: master
+    commands:
+      - curl -H 'API-KEY' -XPOST http://deployer.crowdtap.com/deploys/$CIRCLE_PROJECT_REPONAME/production/$CIRCLE_SHA1

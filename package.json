@@ -1,0 +1,15 @@
+{
+  "name": "generator-crowdtap-angular",
+  "version": "0.1.0",
+  "description": "The Crowdtap Angular generator",
+  "keywords": ["yeoman-generator", "crowdtap", "angular"],
+  "dependencies": {
+    "yeoman-generator": "^0.17.0",
+    "underscore.string": "2.3.3"
+  },
+  "contributors": [
+    { "name" : "Maulin Pathare",
+      "email" : "maulinp@crowdtap.com"
+    }
+  ]
+}
