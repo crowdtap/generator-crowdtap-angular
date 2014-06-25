@@ -1,7 +1,7 @@
-var util = require('util');
-var path = require('path');
-var _s   = require('underscore.string')
-
+var util   = require('util');
+var path   = require('path');
+var _s     = require('underscore.string')
+var chalk  = require('chalk');
 var yeoman = require('yeoman-generator');
 
 var CrowdtapAngularGenerator = yeoman.generators.Base.extend();
@@ -82,5 +82,23 @@ CrowdtapAngularGenerator.prototype.copyFiles = function() {
 
   this.template('_css_index.less', 'css/index.less');
   this.template('_base.less', 'css/base/base.less');
-}
+};
+
+CrowdtapAngularGenerator.prototype.done = function() {
+  var output = '\n'
+    + chalk.yellow('\nSweet!') + ' You are almost done. \n'
+    + '\n'
+    + chalk.yellow('There are still a few things you need to do')
+    + chalk.red('\n============================================\n')
+    + chalk.yellow('*') + 'Run npm install'
+    + '\n'
+    + chalk.yellow('*') + 'Add the copycopter API KEY for your project to the gulpfile'
+    + '\n'
+    + chalk.yellow('*') + 'Add the circleci API KEY for your project to the circle.yml file (Ask the DevOps team for this)'
+    + '\n'
+    + chalk.yellow('*') + 'The public.html file is just a template. Make sure your set it up the way the page is served by rails'
+    + chalk.red('\n============================================\n')
+
+  console.log(output);
+};
 module.exports = CrowdtapAngularGenerator
