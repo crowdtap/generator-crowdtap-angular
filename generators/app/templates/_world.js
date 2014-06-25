@@ -1,6 +1,6 @@
-"use strict";
-
 (function() {
+  "use strict";
+
   var App, Factory, Port, Server, World, assert, express, path, selectors, sprintf, _;
 
   Factory   = require('rosie').Factory;

@@ -1,8 +1,8 @@
 /* global Browser */
 
-"use strict";
-
 (function() {
+  "use strict";
+
   var express, should, _;
 
   _       = require('underscore');
