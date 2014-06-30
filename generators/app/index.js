@@ -8,8 +8,14 @@ var CrowdtapAngularGenerator = yeoman.generators.Base.extend();
 
 CrowdtapAngularGenerator.prototype.getAppName = function() {
   var done = this.async();
-
-  console.log(this.yeoman);
+  var logo = ["   ______                       ____            ",
+              "  / _____________ _      ______/ / /_____ _____ ",
+              " / /   / ___/ __ | | /| / / __  / __/ __ `/ __ \\",
+              "/ /___/ /  / /_/ | |/ |/ / /_/ / /_/ /_/ / /_/ /",
+              "\____/_/   \____/|__/|__/\__,_/\__/\__,_/ .___/ ",
+              "                                       /_/      "].join("\n")
+  console.log(logo);
+  console.log("Welcome to the Crowdtap Angular Generator\n\n");
 
   var prompts = [
     {
