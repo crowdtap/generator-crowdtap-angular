@@ -20,11 +20,7 @@ module.exports = function(config) {
     files: [
       'vendor/angular/angular.min.js',
       'vendor/angular-resource/angular-resource.min.js',
-      'vendor/angular-mocks/angular-mocks.js',
-      'vendor/angular-route/angular-route.js',
-      'vendor/angular-sanitize/angular-sanitize.js',
       'public/application.js',
-      'spec/directive_spec.js'
     ],
 
 
