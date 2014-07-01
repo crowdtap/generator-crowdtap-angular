@@ -71,6 +71,7 @@ CrowdtapAngularGenerator.prototype.copyFiles = function() {
   this.copy('_circle.yml', 'circle.yml');
   this.copy('_node-version', '.node-version');
   this.copy('_bowerrc', '.bowerrc');
+  this.copy('_karma_conf.js', 'karma_conf.js');
 
   this.template('_app.js', 'app/app.js');
   this.template('_directive.js', 'app/directives/directive.js');
@@ -100,7 +101,9 @@ CrowdtapAngularGenerator.prototype.done = function() {
     + '\n'
     + chalk.yellow('*') + 'Add the copycopter API KEY for your project to the gulpfile'
     + '\n'
-    + chalk.yellow('*') + 'Add the circleci API KEY for your project to the circle.yml file (Ask the DevOps team for this)'
+    + chalk.yellow('*') + 'Ask the DevOps team to setup your project on circle'
+    + '\n'
+    + chalk.yellow('*') + 'Make sure to add the karma task to the test task in the gulp file if you have specs'
     + '\n'
     + chalk.yellow('*') + 'The public.html file is just a template. Make sure your set it up the way the page is served by rails'
     + chalk.red('\n============================================\n')

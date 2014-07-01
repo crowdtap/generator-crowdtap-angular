@@ -10,7 +10,6 @@
   selectors = require('./selectors');
   sprintf   = require('sprintf');
   _         = require('underscore');
-  require('./core_ext');
   require('../../spec/factories/index');
 
   if (process.env.SEQ) {

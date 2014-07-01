@@ -168,5 +168,5 @@ gulp.task('compileGenerate:development', ['less', 'ngTemplates', 'ngConstants:de
 gulp.task('compileGenerate:production', ['less', 'ngTemplates', 'ngConstants:production']);
 
 gulp.task('default', ['lint', 'compileGenerate:development', 'wrap', 'uglify:development', 'watch', 'express']);
-gulp.task('test', ['lint', 'compileGenerate:test', 'wrap', 'uglify:test', 'shell:runKarma', 'shell:runTests']);
+gulp.task('test', ['lint', 'compileGenerate:test', 'wrap', 'uglify:test', 'shell:runTests']);
 gulp.task('production-build', ['compileGenerate:production', 'wrap', 'uglify:production']);
