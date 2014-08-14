@@ -14,6 +14,8 @@ var prefix      = require('gulp-autoprefixer');
 var replace     = require('gulp-replace');
 var uglify      = require('gulp-uglify');
 var karma       = require('gulp-karma');
+var _           = require('lodash');
+var path        = require('path');
 
 var manifest = {
   css: [
