@@ -1,125 +1,66 @@
-var gulp             = require('gulp');
-var concat           = require('gulp-concat');
-var jshint           = require('gulp-jshint');
-var uglify           = require('gulp-uglify');
-var less             = require('gulp-less');
-var angularTemplates = require('gulp-ng-html2js');
-var ngConstant       = require('gulp-ng-constant');
-var nodemon          = require('gulp-nodemon');
-var shell            = require('gulp-shell');
-var wrapper          = require('gulp-wrapper');
-var karma            = require('gulp-karma');
+var env = process.env.NODE_ENV || 'development';
 
-javascripts = [
-  'vendor/angular/angular.js',
-  'vendor/angular-resource/angular-resource.js',
-  'vendor/copycopter/lib/copycopter.js',
-  'vendor/enhance/build/enhance.js',
-  'public/module.js',
-  'public/config.js',
-  'public/template.js'
-]
+var gulp        = require('gulp');
+var gutil       = require('gulp-util');
+var concat      = require('gulp-concat');
+var gulpif      = require('gulp-if');
+var less        = require('gulp-less');
+var minifyCSS   = require('gulp-minify-css');
+var ngAnnotate  = require('gulp-ng-annotate');
+var ngConstant  = require('gulp-ng-constant');
+var ngTemplates = require('gulp-ng-html2js');
+var nodemon     = require('gulp-nodemon');
+var prefix      = require('gulp-autoprefixer');
+var replace     = require('gulp-replace');
+var uglify      = require('gulp-uglify');
+var karma       = require('gulp-karma');
 
-gulp.on('err', function(err) {
-  throw err;
-});
+var manifest = {
+  css: [
+    'css/index.less',
+  ],
+  javascripts: [
+    'vendor/angular/angular.js',
+    'vendor/angular-resource/angular-resource.js',
+    'vendor/copycopter/lib/copycopter.js',
+    'vendor/enhance/build/enhance.js',
+    'public/config.js',
+    'public/module.js',
+    'public/template.js'
+  ]
+};
 
-gulp.task('uglify:test', ['wrap', 'ngConstants:test', 'ngTemplates'], function() {
-  return gulp.src(javascripts)
-    .pipe(concat('application.js'))
-    .pipe(uglify({ mangle: false, output: { beautify: true } }))
-    .pipe(gulp.dest('public'));
-});
 
-gulp.task('uglify:development', ['wrap', 'ngConstants:development', 'ngTemplates'], function() {
-  return gulp.src(javascripts)
-    .pipe(concat('application.js'))
-    .pipe(uglify({ mangle: false, output: { beautify: true } }))
-    .pipe(gulp.dest('public'));
-});
-
-gulp.task('uglify:production', ['wrap', 'ngConstants:production', 'ngTemplates'], function() {
-  return gulp.src(javascripts)
-    .pipe(concat('application.js'))
-    .pipe(uglify())
-    .pipe(gulp.dest('public'));
-});
-
-gulp.task('less', function() {
-  return gulp.src('css/index.less')
-    .pipe(less({ paths: ['css'], compress: true }))
+gulp.task('css', function() {
+  return gulp.src(manifest.css)
+    .pipe(gulpif(/\.less$/, less({
+      paths: [
+        path.join(__dirname, 'css')
+      ]
+    })))
+    .pipe(replace(/images/g, '<%= fullAppName %>/images/vendor'))
+    .pipe(prefix('last 3 versions', 'ie 9'))
     .pipe(concat('application.css'))
+    .pipe(minifyCSS())
     .pipe(gulp.dest('public'));
 });
 
-gulp.task('ngConstants:test', function() {
+gulp.task('constants', function() {
+  var constants = require('./config/constants.js')[env];
+
   return gulp.src('app/config.json')
     .pipe(ngConstant({
       constants: {
-        config: {
-            assetPrefixUrl: "",
-            branch: "",
-            hashAssets: false,
-            copycopter: {
-              apiKey: '01234',
-            },
-            loadMoreActions: 5,
-            enhance: false
-        }
+        config: constants
       }
     }))
     .pipe(concat('config.js'))
     .pipe(gulp.dest('public'));
 });
 
-gulp.task('ngConstants:development', function() {
-  return gulp.src('app/config.json')
-    .pipe(ngConstant({
-      constants: {
-        config: {
-            assetPrefixUrl: "http://localhost:9003",
-            branch: "production",
-            hashAssets: false,
-            copycopter: {
-              apiKey: 'API-KEY',
-              host:   'copycopter.crowdtap.com'
-            },
-            loadMoreActions: 5,
-            enhance: false
-        }
-      }
-    }))
-    .pipe(concat('config.js'))
-    .pipe(gulp.dest('public'));
-});
-
-gulp.task('ngConstants:production', function() {
-  return gulp.src('app/config.json')
-    .pipe(ngConstant({
-      constants: {
-        config: {
-            assetPrefixUrl: "//d18w78eemwzu3j.cloudfront.net/<%= fullAppName %>",
-            branch: "production",
-            hashAssets: false,
-            copycopter: {
-              apiKey: 'API-KEY',
-              host:   'copycopter.crowdtap.com'
-            },
-            loadMoreActions: 5,
-            enhance: {
-              host:           '//dgj5ep7xp9u24.cloudfront.net/transform_image/qe/app/<%= appName %>',
-              tabletAsMobile: false
-            }
-        }
-      }
-    }))
-    .pipe(concat('config.js'))
-    .pipe(gulp.dest('public'));
-});
-
-gulp.task('ngTemplates', function() {
+gulp.task('templates', function() {
   return gulp.src("app/views/**/*.html")
-    .pipe(angularTemplates({
+    .pipe(ngTemplates({
       moduleName: '<%= fullAppName %>',
       rename: function(url) {
         return url.replace(".html", "");
@@ -129,44 +70,50 @@ gulp.task('ngTemplates', function() {
     .pipe(gulp.dest('public'));
 });
 
-gulp.task('wrap', function() {
-  return gulp.src('app/**/*.js')
-    .pipe(concat('module.js'))
-    .pipe(wrapper({ header: "(function () {", footer: "}).call(this);" }))
+gulp.task('specs', ['js'], function() {
+  var javascripts = ["public/jquery.min.js",
+                     "public/assets.shared.js",
+                     "public/application.js",
+                     "spec/**/*_spec.js"];
+
+  return gulp.src(javascripts)
+    .pipe(karma({
+      configFile: 'karma.conf.js',
+      action: 'run'
+    }))
+    .on('error', function(err) {
+      throw err;
+    });
+});
+
+gulp.task('js', ['constants', 'templates'], function() {
+  var javascripts = manifest.javascripts;
+  if (env === 'test') {
+    javascripts = _.without(javascripts, 'vendor/js-base64/base64.js');
+  }
+
+  return gulp.src(manifest.javascripts)
+    .pipe(ngAnnotate())
+    .pipe(concat('application.js'))
+    .pipe(gulpif(env === 'production', uglify()))
     .pipe(gulp.dest('public'));
 });
 
-gulp.task('shell:runTests', ['lint', 'compileGenerate:test', 'uglify:test'], shell.task('./run_tests.sh'));
-gulp.task('shell:runKarma', ['lint', 'compileGenerate:test', 'uglify:test'], shell.task('./node_modules/karma/bin/karma start karma.conf.js --single-run'));
-
-gulp.task('lint', function() {
-  return gulp.src(['app/**/*.js', 'features/**/*.js'])
-    .pipe(jshint())
-    .pipe(jshint.reporter('jshint-stylish'));
+gulp.task('watch', ['css', 'js'], function() {
+  gulp.watch('css/**/*', ['css']);
+  gulp.watch('app/**/*', ['js']);
+  if (env !== 'test') {
+    nodemon({
+      script: 'server.js',
+      ext:    'html js css',
+      watch: ['server.js', 'spec/factories/*'],
+      env: {
+        NODE_ENV: env,
+      }
+    }).on('restart', function() {
+      gutil.log(gutil.colors.yellow('Server restarted!'));
+    });
+  }
 });
 
-gulp.task('watch', function() {
-  gulp.watch(['app/**/*.js'], ['lint', 'wrap', 'uglify:development']);
-  gulp.watch(['features/**/*.js'], ['lint']);
-  gulp.watch(['css/**/*.less'], ['less']);
-  gulp.watch(['app/views/**/*.html'], ['ngTemplates', 'uglify:development']);
-});
-
-gulp.task('express', ['lint', 'compileGenerate:development', 'uglify:development'], function() {
-  nodemon({
-    script: './server.js',
-    ext:    'html js css',
-    watch:  ['server.js', 'spec/factories/index.js']
-  })
-  .on('restart', function() {
-    console.log('Server restarted!');
-  });
-});
-
-gulp.task('compileGenerate:test', ['less', 'ngTemplates', 'ngConstants:test']);
-gulp.task('compileGenerate:development', ['less', 'ngTemplates', 'ngConstants:development']);
-gulp.task('compileGenerate:production', ['less', 'ngTemplates', 'ngConstants:production']);
-
-gulp.task('default', ['lint', 'compileGenerate:development', 'wrap', 'uglify:development', 'watch', 'express']);
-gulp.task('test', ['lint', 'compileGenerate:test', 'wrap', 'uglify:test', 'shell:runTests']);
-gulp.task('production-build', ['compileGenerate:production', 'wrap', 'uglify:production']);
+gulp.task('default', ['css', 'js']);
