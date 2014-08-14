@@ -1,10 +1,14 @@
 /* Uncoment this template to create your own directives
  *
-<%= camelizedAppName %>.directive('myDirective', function() {
+function myDirective() {
+  'use strict';
+
   return {
     restrict: 'A',
     link: function($scope) {
     }
   };
-});
+}
+
+angular.module('<%= fullAppName %>').directive('myDirective', myDirective);
 */

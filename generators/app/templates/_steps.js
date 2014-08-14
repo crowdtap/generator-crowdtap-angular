@@ -1,7 +1,7 @@
 /* global Browser */
 
 (function() {
-  "use strict";
+  'use strict';
 
   var express, should, _;
 

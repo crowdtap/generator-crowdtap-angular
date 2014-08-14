@@ -47,6 +47,8 @@ CrowdtapAngularGenerator.prototype.createStructure = function() {
   this.mkdir('app/controllers');
   this.mkdir('app/views');
 
+  this.mkdir('config');
+
   this.mkdir('css');
   this.mkdir('css/base');
   this.mkdir('css/components');
@@ -76,6 +78,7 @@ CrowdtapAngularGenerator.prototype.copyFiles = function() {
   this.template('_app.js', 'app/app.js');
   this.template('_directive.js', 'app/directives/directive.js');
   this.template('_filters.js', 'app/filters.js');
+  this.template('_constants.js', 'config/constants.js');
   this.template('_config.json', 'app/config.json');
 
   this.template('_steps.js', 'features/step_definitions/steps.js');
