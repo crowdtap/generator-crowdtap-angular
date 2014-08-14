@@ -21,7 +21,4 @@
   */
 
   app.listen(<%= appPort %>);
-
-  module.exports = app;
-
 }).call(this);
