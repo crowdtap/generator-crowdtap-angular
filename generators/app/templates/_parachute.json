@@ -1,7 +1,5 @@
 {
-  "dependencies": [
-    {
-      "src": "git@github.com:crowdtap/assets.shared.git#webdriver"
-    }
-  ]
+  "git@github.com:crowdtap/assets.shared": {
+    "groups": ["bundle", "less-globals", "less-bs-2", "webdriver"]
+  }
 }
