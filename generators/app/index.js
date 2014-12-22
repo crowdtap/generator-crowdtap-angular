@@ -32,7 +32,7 @@ CrowdtapAngularGenerator.prototype.getAppName = function() {
     }
   ]
   this.prompt(prompts, function(props) {
-    this.appPrefix = props.appprefix;
+    this.appPrefix = props.appPrefix;
     this.appName   = props.appName;
     this.appPort   = props.appPort;
     done();
