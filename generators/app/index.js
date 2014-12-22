@@ -74,6 +74,7 @@ CrowdtapAngularGenerator.prototype.copyFiles = function() {
   this.copy('_node-version', '.node-version');
   this.copy('_bowerrc', '.bowerrc');
   this.copy('_karma_conf.js', 'karma_conf.js');
+  this.copy('_install-firefox-30.sh', 'install-firefox-30.sh');
 
   this.template('_app.js', 'app/app.js');
   this.template('_directive.js', 'app/directives/directive.js');
