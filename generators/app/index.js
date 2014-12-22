@@ -19,8 +19,12 @@ CrowdtapAngularGenerator.prototype.getAppName = function() {
 
   var prompts = [
     {
+      name: 'appPrefix',
+      message: "Enter the prefix for your app (crowdtap, socialstars etc):"
+    },
+    {
       name: 'appName',
-      message: "Enter the name of your app. It will automatically be prefixed with 'crowdtap':"
+      message: "Enter the name of your app. It will automatically be prefixed with the prefix you entered before:"
     },
     {
       name: 'appPort',
@@ -28,14 +32,15 @@ CrowdtapAngularGenerator.prototype.getAppName = function() {
     }
   ]
   this.prompt(prompts, function(props) {
-    this.appName = props.appName;
-    this.appPort = props.appPort;
+    this.appPrefix = props.appPrefix;
+    this.appName   = props.appName;
+    this.appPort   = props.appPort;
     done();
   }.bind(this));
 };
 
 CrowdtapAngularGenerator.prototype.createStructure = function() {
-  this.fullAppName = 'crowdtap.' + this.appName;
+  this.fullAppName = this.appPrefix + '.' + this.appName;
   this.camelizedAppName = _s.camelize(this.appName);
 
   this.mkdir(this.fullAppName);
@@ -73,7 +78,9 @@ CrowdtapAngularGenerator.prototype.copyFiles = function() {
   this.copy('_circle.yml', 'circle.yml');
   this.copy('_node-version', '.node-version');
   this.copy('_bowerrc', '.bowerrc');
-  this.copy('_karma_conf.js', 'karma_conf.js');
+  this.copy('_karma.conf.js', 'karma.conf.js');
+  this.copy('_install-firefox-30.sh', 'install-firefox-30.sh');
+  this.copy('_gitignore', '.gitignore');
 
   this.template('_app.js', 'app/app.js');
   this.template('_directive.js', 'app/directives/directive.js');

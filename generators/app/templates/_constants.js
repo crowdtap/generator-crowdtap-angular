@@ -1,7 +1,7 @@
 module.exports = {
 
   development: {
-    assetPrefixUrl: "http://localhost:9009",
+    assetPrefixUrl: "http://localhost:<%= appPort %>",
     hashAssets: false,
     copycopter: {
       apiKey: '01234'

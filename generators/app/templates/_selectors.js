@@ -1,4 +1,6 @@
 /* jshint strict: false */
+var _ = require('underscore');
+_.str = require("underscore.string");
 
 module.exports = {
   '^the page$': '#<%= appName %>',
@@ -13,9 +15,9 @@ module.exports = {
     return tag_name;
   },
   '^the (.*) element$': function(id) {
-    return "#" + (id.dasherize());
+    return "#" + (_.str.dasherize(id));
   },
   '^the (.*) section$': function(klass) {
-    return "." + (klass.dasherize());
+    return "." + (_.str.dasherize(klass));
   }
 };
