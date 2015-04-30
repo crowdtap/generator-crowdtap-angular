@@ -71,13 +71,12 @@
       var selector1, selector2;
       selector1 = this.selectorFor(element1);
       selector2 = this.selectorFor(element2);
-      return this.browser.findElement({
+      return this.browser.isElementPresent({
         css: "" + selector2 + " " + selector1
-      }).then((function() {
-        return function() {
-          return callback();
-        };
-      })());
+      }).then(function(found) {
+        found.should.eql(!negation);
+        return callback();
+      });
     });
 
     this.Then(/^I should (not )?see an? (link|image) linking to "(.*)"(?: (.*))?$/, function(negation, tag, url, element, callback) {
@@ -105,7 +104,7 @@
             throw new Error("" + selector + " is not visible on the page");
           }
         });
-      }, function() { 
+      }, function() {
         if (typeof negation !== 'undefined') {
           return callback();
         } else {
