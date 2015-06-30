@@ -1,5 +1,5 @@
 {
   "git@github.com:crowdtap/assets.shared": {
-    "groups": ["bundle", "less-globals", "less-bs-2", "webdriver"]
+    "groups": ["bundle-bs3", "less-globals", "less-bs-3", "webdriver"]
   }
 }
