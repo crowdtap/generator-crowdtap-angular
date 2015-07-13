@@ -1,21 +1,10 @@
 var env = process.env.NODE_ENV || 'development';
 
-var gulp        = require('gulp');
-var gutil       = require('gulp-util');
-var concat      = require('gulp-concat');
-var gulpif      = require('gulp-if');
-var less        = require('gulp-less');
-var minifyCSS   = require('gulp-minify-css');
-var ngAnnotate  = require('gulp-ng-annotate');
-var ngConstant  = require('gulp-ng-constant');
-var ngTemplates = require('gulp-ng-html2js');
-var nodemon     = require('gulp-nodemon');
-var prefix      = require('gulp-autoprefixer');
-var replace     = require('gulp-replace');
-var uglify      = require('gulp-uglify');
-var karma       = require('gulp-karma');
-var _           = require('lodash');
-var path        = require('path');
+var gulp    = require('gulp');
+var gutil   = require('gulp-util');
+var plugins = require('gulp-load-plugins')();
+var _       = require('lodash');
+var path    = require('path');
 
 var manifest = {
   css: [
@@ -36,15 +25,15 @@ var manifest = {
 
 gulp.task('css', function() {
   return gulp.src(manifest.css)
-    .pipe(gulpif(/\.less$/, less({
+    .pipe(plugins.if(/\.less$/, plugins.less({
       paths: [
         path.join(__dirname, 'css')
       ]
     })))
-    .pipe(replace(/images/g, '<%= fullAppName %>/images/vendor'))
-    .pipe(prefix('last 3 versions', 'ie 9'))
-    .pipe(concat('application.css'))
-    .pipe(minifyCSS())
+    .pipe(plugins.replace(/images/g, '<%= fullAppName %>/images/vendor'))
+    .pipe(plugins.autoprefixer('last 3 versions', 'ie 9'))
+    .pipe(plugins.concat('application.css'))
+    .pipe(plugins.minifyCss())
     .pipe(gulp.dest('public'));
 });
 
@@ -52,24 +41,24 @@ gulp.task('constants', function() {
   var constants = require('./config/constants.js')[env];
 
   return gulp.src('app/config.json')
-    .pipe(ngConstant({
+    .pipe(plugins.ngConstant({
       constants: {
         config: constants
       }
     }))
-    .pipe(concat('config.js'))
+    .pipe(plugins.concat('config.js'))
     .pipe(gulp.dest('public'));
 });
 
 gulp.task('templates', function() {
   return gulp.src("app/views/**/*.html")
-    .pipe(ngTemplates({
+    .pipe(plugins.ngHtml2js({
       moduleName: '<%= fullAppName %>',
       rename: function(url) {
         return url.replace(".html", "");
       }
     }))
-    .pipe(concat('template.js'))
+    .pipe(plugins.concat('template.js'))
     .pipe(gulp.dest('public'));
 });
 
@@ -80,7 +69,7 @@ gulp.task('specs', ['js'], function() {
                      "spec/**/*_spec.js"];
 
   return gulp.src(javascripts)
-    .pipe(karma({
+    .pipe(plugins.karma({
       configFile: 'karma.conf.js',
       action: 'run'
     }))
@@ -96,9 +85,15 @@ gulp.task('js', ['constants', 'templates'], function() {
   }
 
   return gulp.src(manifest.javascripts)
-    .pipe(ngAnnotate())
-    .pipe(concat('application.js'))
-    .pipe(gulpif(env === 'production', uglify()))
+    .pipe(plugins.cached('scripts'))
+    .pipe(plugins.if(function(file) {
+      var es6Compat = file.path.match(/app\/.*\.js/);
+      return es6Compat;
+    }, plugins.babel()))
+    .pipe(plugins.ngAnnotate())
+    .pipe(plugins.if(env === 'production', plugins.uglify()))
+    .pipe(plugins.remember('scripts'))
+    .pipe(plugins.concat('application.js', { newLine: ';' }))
     .pipe(gulp.dest('public'));
 });
 
@@ -106,7 +101,7 @@ gulp.task('watch', ['css', 'js'], function() {
   gulp.watch('css/**/*', ['css']);
   gulp.watch('app/**/*', ['js']);
   if (env !== 'test') {
-    nodemon({
+    plugins.nodemon({
       script: 'server.js',
       ext:    'html js css',
       watch: ['server.js', 'spec/factories/*'],
