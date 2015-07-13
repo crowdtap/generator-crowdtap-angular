@@ -1,15 +1,15 @@
 (function() {
-  var Factory, app, express, fs, path, _;
-
-  express = require('express');
-  _ = require('underscore');
-  fs = require('fs');
-  path = require('path');
-  Factory = require('rosie').Factory;
+  var express = require('express');
+  var _ = require('underscore');
+  var fs = require('fs');
+  var path = require('path');
+  var Factory = require('rosie').Factory;
+  var bodyParser = require('body-parser');
   require('./spec/factories/index');
 
-  app = express();
-  app.use(express.bodyParser());
+  var app = express();
+  app.use(bodyParser.json());
+  app.use(bodyParser.urlencoded({ extended: true }));
   app.use(express.static('./public'));
 
   /* uncomment the template below to define the routes
