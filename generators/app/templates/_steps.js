@@ -165,8 +165,7 @@
         options.css = selector;
       }
 
-      this.browser.findElement(options).click();
-      return callback();
+      this.browser.findElement(options).click().then(callback);
     });
 
     this.Then(/^I wait (\d+) seconds?.*$/, function(count, callback) {
