@@ -3,17 +3,15 @@
 (function() {
   'use strict';
 
-  var express, should, _;
-
-  _       = require('underscore');
-  should  = require('should');
-  express = require('express');
+  var _       = require('underscore');
+  var should  = require('should');
+  var express = require('express');
+  var chalk   = require('chalk');
+  var prompt  = require('prompt');
   require('../../spec/factories/index');
 
   function clearRoutes(_this) {
-    _this.app.routes.get = [];
-    _this.app.routes.post = [];
-    _this.app.routes.put = [];
+    _this.app._router.stack = _.reject(_this.app._router.stack, { name: '<anonymous>' });
   }
 
   module.exports = function() {
@@ -30,7 +28,7 @@
       this.app.use(function(req, res, next) {
         queue.push({ verb: req.method, url:  req.url, body: req.body });
         return next();
-      }.bind(this));
+      });
 
       this.browser = Browser;
       this.browser.manage().timeouts().setScriptTimeout(100.0 * 1000);

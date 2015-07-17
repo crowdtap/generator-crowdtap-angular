@@ -1,15 +1,14 @@
 (function() {
   'use strict';
 
-  var App, Factory, Port, Server, World, assert, express, path, selectors, sprintf, _;
-
-  Factory   = require('rosie').Factory;
-  assert    = require('assert');
-  path      = require('path');
-  express   = require('express');
-  selectors = require('./selectors');
-  sprintf   = require('sprintf');
-  _         = require('underscore');
+  var Factory    = require('rosie').Factory;
+  var bodyParser = require('body-parser');
+  var assert     = require('assert');
+  var path       = require('path');
+  var express    = require('express');
+  var selectors  = require('./selectors');
+  var sprintf    = require('sprintf');
+  var _          = require('underscore');
   require('../../spec/factories/index');
 
   if (process.env.SEQ) {
@@ -20,14 +19,13 @@
   App = express();
   App.use(express.static(path.join(process.cwd(), 'public')));
   Server = App.listen(Port);
-  App.use(express.bodyParser());
+  App.use(bodyParser.json());
   App.set('views', './public');
-  App.engine('.html', require('consolidate').hogan);
+  App.use(bodyParser.urlencoded({ extended: true }));
 
   World = (function() {
     function World(callback) {
       this.assert = assert;
-      this.queue = [];
       callback();
     }
 
