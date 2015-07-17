@@ -114,4 +114,5 @@ gulp.task('watch', ['css', 'js'], function() {
   }
 });
 
+gulp.task('test-server', ['watch'], plugins.shell.task([ './selenium/start' ]));
 gulp.task('default', ['css', 'js']);
