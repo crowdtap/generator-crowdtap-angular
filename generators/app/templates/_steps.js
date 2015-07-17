@@ -172,8 +172,23 @@
       return this.browser.sleep(1000 * parseInt(count)).then(callback);
     });
 
-    this.When(/^show me the page$/, function() {
-      return console.log('pausing...');
+    this.Then(/^show me the page$/, function(cb) {
+      console.log(chalk.yellow('\nShowing the page'));
+
+      prompt.start();
+      prompt.get([{
+        name: 'continue',
+        description: 'continue [Ynq]'
+      }], function(err, result) {
+        switch (result.continue.toLowerCase()) {
+          case 'n':
+          case 'q':
+            this.browser.close().then(process.exit);
+            break;
+          default:
+            cb();
+        }
+      }.bind(this));
     });
 
     this.Then(/^(.+) should (not )?have (?:the )?"([^"]*)" css class$/, function(selector, negator, cssClass, callback) {
