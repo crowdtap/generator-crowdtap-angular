@@ -6,7 +6,7 @@ dependencies:
   cache_directories:
     - firefox
   pre:
-    - bash ./install-firefox-30.sh
+    - bash ./install-firefox.sh
 machine:
   timezone:
     America/New_York
