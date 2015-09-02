@@ -1,6 +1,8 @@
+"use strict";
+
 var util   = require('util');
 var path   = require('path');
-var _s     = require('underscore.string')
+var _s     = require('underscore.string');
 var chalk  = require('chalk');
 var yeoman = require('yeoman-generator');
 
@@ -13,7 +15,7 @@ CrowdtapAngularGenerator.prototype.getAppName = function() {
               " / /   / ___/ __ | | /| / / __  / __/ __ `/ __ \\",
               "/ /___/ /  / /_/ | |/ |/ / /_/ / /_/ /_/ / /_/ /",
               "\____/_/   \____/|__/|__/\__,_/\__/\__,_/ .___/ ",
-              "                                       /_/      "].join("\n")
+              "                                       /_/      "].join("\n");
   console.log(logo);
   console.log("Welcome to the Crowdtap Angular Generator\n\n");
 
@@ -29,8 +31,14 @@ CrowdtapAngularGenerator.prototype.getAppName = function() {
     {
       name: 'appPort',
       message: "Enter the port number your app will run on locally:"
+    },
+    {
+      name: 'sentrySetup',
+      message: ["Please visit https://crowdtap.atlassian.net/wiki/display/EN/2014/10/16/Sentry+Part+I%3A+Migration",
+      "follow the instructions under 'Front end apps' and 'integrations'",
+      "enter 'yes' if you have set up Sentry for your new app:"].join('\n')
     }
-  ]
+  ];
   this.prompt(prompts, function(props) {
     this.appPrefix = props.appPrefix;
     this.appName   = props.appName;
@@ -79,7 +87,7 @@ CrowdtapAngularGenerator.prototype.copyFiles = function() {
   this.copy('_node-version', '.node-version');
   this.copy('_bowerrc', '.bowerrc');
   this.copy('_karma.conf.js', 'karma.conf.js');
-  this.copy('_install-firefox-30.sh', 'install-firefox-30.sh');
+  this.copy('_install-firefox.sh', 'install-firefox.sh');
   this.copy('_gitignore', '.gitignore');
 
   this.template('_app.js', 'app/app.js');
@@ -116,8 +124,8 @@ CrowdtapAngularGenerator.prototype.done = function() {
     + chalk.yellow('*') + 'Make sure to add the karma task to the test task in the gulp file if you have specs'
     + '\n'
     + chalk.yellow('*') + 'The public.html file is just a template. Make sure your set it up the way the page is served by rails'
-    + chalk.red('\n============================================\n')
+    + chalk.red('\n============================================\n');
 
   console.log(output);
 };
-module.exports = CrowdtapAngularGenerator
+module.exports = CrowdtapAngularGenerator;
