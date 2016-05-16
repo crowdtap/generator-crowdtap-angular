@@ -117,8 +117,6 @@ CrowdtapAngularGenerator.prototype.done = function() {
     + chalk.red('\n============================================\n')
     + chalk.yellow('*') + 'Run npm install'
     + '\n'
-    + chalk.yellow('*') + 'Add the copycopter API KEY for your project to the gulpfile'
-    + '\n'
     + chalk.yellow('*') + 'Ask the DevOps team to setup your project on circle'
     + '\n'
     + chalk.yellow('*') + 'Make sure to add the karma task to the test task in the gulp file if you have specs'
