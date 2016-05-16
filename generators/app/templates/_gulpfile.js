@@ -13,7 +13,6 @@ var manifest = {
   javascripts: [
     'vendor/angular/angular.js',
     'vendor/angular-resource/angular-resource.js',
-    'vendor/copycopter/lib/copycopter.js',
     'vendor/enhance/build/enhance.js',
     'app/**/*.js',
     'public/config.js',
